@@ -54,7 +54,7 @@ class BasicTest extends TestCase
         $this->assertEquals(12, $output);
         // Convert strings to numbers for mathematical operations
         $evaluator = new FormulaExpression();
-        $output = $evaluator->evaluate('a.toNumber() + b', [
+        $output = $evaluator->evaluate('a + b', [
             'a' => '5',
             'b' => 4
         ]);
