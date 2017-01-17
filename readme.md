@@ -1,4 +1,4 @@
-PHP Formula Expression Language [![Build Status](https://api.travis-ci.org/aozisik/formula-expression.svg?branch=master)](https://travis-ci.org/aozisik/formula-expression)
+PHP Formula Expression Language [![Build Status](https://api.travis-ci.org/swiftmade/formula-expression.svg?branch=master)](https://travis-ci.org/swiftmade/formula-expression)
 =======
 
 This is an extension upon Symfony's great ExpressionLanguage component.

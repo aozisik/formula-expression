@@ -1,5 +1,5 @@
 {
-    "name": "aozisik/formula-expression",
+    "name": "swiftmade/formula-expression",
     "description": "Extends Symfony's ExpressionLanguage to introduce awesome features",
     "type": "library",
     "license": "MIT",
