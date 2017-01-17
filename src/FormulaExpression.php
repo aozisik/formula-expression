@@ -62,11 +62,16 @@ class FormulaExpression
                 $result = null;
                 continue;
             } else {
-                return $result;
+                return $this->output($result);
             }
         }
 
-        return $result;
+        return $this->output($result);
+    }
+
+    protected function output($result)
+    {
+        return (new Result($result))->output();
     }
 
     protected function evaluateLine($line, array &$context)
