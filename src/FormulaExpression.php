@@ -3,9 +3,11 @@
 namespace Swiftmade\FEL;
 
 use Swiftmade\FEL\Contracts\FilterContract;
+use Swiftmade\FEL\Contracts\OverriderContract;
 use Swiftmade\FEL\Filters\BlockIf;
 use Swiftmade\FEL\Filters\SetVariable;
 use Swiftmade\FEL\Filters\InlineIf;
+use Swiftmade\FEL\Overriders\Stringy;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class FormulaExpression
@@ -13,16 +15,27 @@ class FormulaExpression
     const SKIP = '_$$skip$$_';
 
     protected $expressionEngine;
-    protected $filters;
+
+    protected $filters = [];
+    protected $overriders = [];
 
     public function __construct()
     {
         $this->expressionEngine = new ExpressionLanguage();
-        $this->filters = [
-            new BlockIf,
-            new InlineIf,
-            new SetVariable
-        ];
+        $this->registerDefaultFilters();
+        $this->registerDefaultOverriders();
+    }
+
+    protected function registerDefaultFilters()
+    {
+        $this->addFilter(new BlockIf);
+        $this->addFilter(new InlineIf);
+        $this->addFilter(new SetVariable);
+    }
+
+    protected function registerDefaultOverriders()
+    {
+        $this->addOverrider(new Stringy);
     }
 
     protected function removeNewLines($code)
@@ -35,6 +48,11 @@ class FormulaExpression
         array_push($this->filters, $filter);
     }
 
+    public function addOverrider(OverriderContract $overrider)
+    {
+        $this->overriders[$overrider->type()] = $overrider;
+    }
+
     public function optimize($code)
     {
         $code = $this->removeNewLines($code);
@@ -44,6 +62,7 @@ class FormulaExpression
     public function evaluate($code, array $variables = [])
     {
         $code = $this->optimize($code);
+        $variables = $this->overrideVariables($variables);
 
         $result = null;
         $lines = explode(';', $code);
@@ -55,6 +74,17 @@ class FormulaExpression
             }
         }
         return $result;
+    }
+
+    protected function overrideVariables(array $variables)
+    {
+        foreach ($variables as $key => $variable) {
+            $type = gettype($variable);
+            if (array_key_exists($type, $this->overriders)) {
+                $variables[$key] = $this->overriders[$type]->override($variable);
+            }
+        }
+        return $variables;
     }
 
     protected function evaluateLine($line, array &$context)
