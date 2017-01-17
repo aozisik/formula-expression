@@ -2,6 +2,7 @@
 
 namespace Swiftmade\FEL;
 
+use Swiftmade\FEL\Contracts\FilterContract;
 use Swiftmade\FEL\Filters\BlockIf;
 use Swiftmade\FEL\Filters\SetVariable;
 use Swiftmade\FEL\Filters\InlineIf;
@@ -27,6 +28,11 @@ class FormulaExpression
     protected function removeNewLines($code)
     {
         return str_replace("\n", '', $code);
+    }
+
+    public function addFilter(FilterContract $filter)
+    {
+        array_push($this->filters, $filter);
     }
 
     public function optimize($code)
