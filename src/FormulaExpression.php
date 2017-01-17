@@ -2,6 +2,8 @@
 
 namespace Swiftmade\FEL;
 
+use Swiftmade\FEL\Filters\BlockIf;
+use Swiftmade\FEL\Filters\InlineIf;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class FormulaExpression
@@ -9,31 +11,44 @@ class FormulaExpression
     const SKIP = '_$$skip$$_';
 
     protected $expressionEngine;
+    protected $filters;
 
     public function __construct()
     {
         $this->expressionEngine = new ExpressionLanguage();
-    }
-
-    protected function evaluateLineWithConditional($line, $conditional, array $context)
-    {
-        if (!$this->evaluateLine($conditional, $context)) {
-            return FormulaExpression::SKIP;
-        }
-        return $this->evaluateLine($line, $context);
+        $this->filters = [
+            new BlockIf,
+            new InlineIf,
+        ];
     }
 
     protected function evaluateLine($line, array $context)
     {
-        $matches = [];
-        if (preg_match('/(.*) if\((.*)\)/', $line, $matches)) {
-            return $this->evaluateLineWithConditional($matches[1], $matches[2], $context);
+        foreach ($this->filters as $filter) {
+            $matches = [];
+            if (preg_match($filter->pattern(), $line, $matches)) {
+                return $filter->process($this, $matches, $context);
+                break;
+            }
         }
         return $this->expressionEngine->evaluate($line, $context);
     }
 
+    protected function removeNewLines($code)
+    {
+        return str_replace("\n", '', $code);
+    }
+
+    public function optimize($code)
+    {
+        $code = $this->removeNewLines($code);
+        return $code;
+    }
+
     public function evaluate($code, array $variables = [])
     {
+        $code = $this->optimize($code);
+
         $result = null;
         $lines = explode(';', $code);
         foreach ($lines as $line) {

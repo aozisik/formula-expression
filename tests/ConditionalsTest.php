@@ -14,4 +14,19 @@ class ConditionalsTest extends TestCase
 
         $this->assertEquals(30, $result);
     }
+
+    public function testItHandlesBlockConditionals()
+    {
+        $code = "if(oranges > 50) {" . PHP_EOL
+            . "\tapples" . PHP_EOL
+            . "}";
+
+        $evaluator = new FormulaExpression();
+        $result = $evaluator->evaluate($code, [
+            'apples' => 30,
+            'oranges' => 51
+        ]);
+
+        $this->assertEquals(30, $result);
+    }
 }
