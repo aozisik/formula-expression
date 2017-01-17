@@ -1,0 +1,19 @@
+{
+    "name": "aozisik/formula-expression",
+    "description": "Extends Symfony's ExpressionLanguage to introduce awesome features",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ahmet Ozisik",
+            "email": "ozisikahmet@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "symfony/expression-language": "^3.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    }
+}
