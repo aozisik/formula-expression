@@ -12,7 +12,7 @@ class BlockIf implements FilterContract
         return '/if\((.*)\) \{(.*)\}/';
     }
 
-    public function process(FormulaExpression $expression, array $matches, array $context)
+    public function process(FormulaExpression $expression, array $matches, array &$context)
     {
         if (!$expression->evaluate($matches[1], $context)) {
             return FormulaExpression::SKIP;

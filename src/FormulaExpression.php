@@ -3,6 +3,7 @@
 namespace Swiftmade\FEL;
 
 use Swiftmade\FEL\Filters\BlockIf;
+use Swiftmade\FEL\Filters\SetVariable;
 use Swiftmade\FEL\Filters\InlineIf;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
@@ -19,19 +20,8 @@ class FormulaExpression
         $this->filters = [
             new BlockIf,
             new InlineIf,
+            new SetVariable
         ];
-    }
-
-    protected function evaluateLine($line, array $context)
-    {
-        foreach ($this->filters as $filter) {
-            $matches = [];
-            if (preg_match($filter->pattern(), $line, $matches)) {
-                return $filter->process($this, $matches, $context);
-                break;
-            }
-        }
-        return $this->expressionEngine->evaluate($line, $context);
     }
 
     protected function removeNewLines($code)
@@ -54,9 +44,22 @@ class FormulaExpression
         foreach ($lines as $line) {
             $result = $this->evaluateLine($line, $variables);
             if ($result === FormulaExpression::SKIP) {
+                $result = null;
                 continue;
             }
         }
         return $result;
+    }
+
+    protected function evaluateLine($line, array &$context)
+    {
+        foreach ($this->filters as $filter) {
+            $matches = [];
+            if (preg_match($filter->pattern(), $line, $matches)) {
+                return $filter->process($this, $matches, $context);
+                break;
+            }
+        }
+        return $this->expressionEngine->evaluate($line, $context);
     }
 }
