@@ -15,5 +15,15 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7"
+    },
+  "autoload": {
+    "psr-4": {
+      "Swiftmade\\FEL\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/TestCase.php"
+    ]
+  }
 }
