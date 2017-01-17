@@ -13,7 +13,7 @@
     "require": {
         "symfony/expression-language": "^3.2",
         "danielstjules/stringy": "^2.3",
-        "dusank/knapsack": "^8.3"
+        "swiftmade/collect": "^5.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7"

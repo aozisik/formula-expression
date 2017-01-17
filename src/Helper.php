@@ -2,8 +2,8 @@
 
 namespace Swiftmade\FEL;
 
-use DusanKasan\Knapsack\Collection;
 use Swiftmade\FEL\Support\Stringy;
+use LaravelCollect\Support\Collection;
 
 class Helper
 {

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a046935d935b0400f97a92ff6381ab61",
-    "content-hash": "c295eb3c0b62e24496f46740e9e76580",
+    "hash": "5991db8524507547830827a8e8e3a664",
+    "content-hash": "044ff651a82b3ca33a05c34237149dd7",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -62,64 +62,6 @@
                 "utils"
             ],
             "time": "2016-05-02 15:18:10"
-        },
-        {
-            "name": "dusank/knapsack",
-            "version": "8.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/DusanKasan/Knapsack.git",
-                "reference": "24078b72beff714b7d71db78663e3e429ec4e788"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/DusanKasan/Knapsack/zipball/24078b72beff714b7d71db78663e3e429ec4e788",
-                "reference": "24078b72beff714b7d71db78663e3e429ec4e788",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6.0"
-            },
-            "require-dev": {
-                "ciaranmcnulty/phpspec-typehintedmethods": "^1.0",
-                "henrikbjorn/phpspec-code-coverage": "^2.0",
-                "phpmd/phpmd": "^2.0",
-                "phpspec/phpspec": "^2.0",
-                "phpunit/phpunit": "^5.0",
-                "squizlabs/php_codesniffer": "^2.0",
-                "symfony/console": "^2.7"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/collection_functions.php",
-                    "src/utility_functions.php"
-                ],
-                "psr-4": {
-                    "DusanKasan\\Knapsack\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dusan Kasan",
-                    "email": "dusan@kasan.sk",
-                    "homepage": "http://kasan.sk",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Collection library for PHP",
-            "homepage": "https://github.com/DusanKasan/Knapsack",
-            "keywords": [
-                "collections",
-                "map",
-                "reduce",
-                "sequences"
-            ],
-            "time": "2016-06-09 11:06:15"
         },
         {
             "name": "psr/cache",
@@ -213,6 +155,53 @@
                 "psr-3"
             ],
             "time": "2016-10-10 12:19:37"
+        },
+        {
+            "name": "swiftmade/collect",
+            "version": "v5.3.30",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swiftmade/collect.git",
+                "reference": "5d7662dfa3308f9230b95e250250e500b377bc37"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swiftmade/collect/zipball/5d7662dfa3308f9230b95e250250e500b377bc37",
+                "reference": "5d7662dfa3308f9230b95e250250e500b377bc37",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.4"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9.4",
+                "phpunit/phpunit": "~4.1"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/LaravelCollect/Support/helpers.php"
+                ],
+                "psr-4": {
+                    "LaravelCollect\\": "src/LaravelCollect"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "Collect - Illuminate Collections as a separate package.",
+            "keywords": [
+                "collection",
+                "laravel"
+            ],
+            "time": "2017-01-17 19:31:55"
         },
         {
             "name": "symfony/cache",

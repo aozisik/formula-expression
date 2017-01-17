@@ -2,9 +2,9 @@
 
 namespace Swiftmade\FEL\Overriders;
 
-use DusanKasan\Knapsack\Collection as KnapsackCollection;
 use Swiftmade\FEL\Contracts\RecastContract;
 use Swiftmade\FEL\Contracts\OverriderContract;
+use LaravelCollect\Support\Collection as LaravelCollection;
 
 class Collection implements OverriderContract, RecastContract
 {
@@ -15,12 +15,12 @@ class Collection implements OverriderContract, RecastContract
 
     public function override($variable)
     {
-        return new KnapsackCollection($variable);
+        return new LaravelCollection($variable);
     }
 
     public function resultType()
     {
-        return KnapsackCollection::class;
+        return LaravelCollection::class;
     }
 
     public function recast($result)
