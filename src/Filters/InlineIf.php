@@ -4,6 +4,7 @@ namespace Swiftmade\FEL\Filters;
 
 use Swiftmade\FEL\FormulaExpression;
 use Swiftmade\FEL\Contracts\FilterContract;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class InlineIf implements FilterContract
 {
@@ -14,10 +15,10 @@ class InlineIf implements FilterContract
 
     public function process(FormulaExpression $expression, array $matches, array &$context)
     {
-        if (!$expression->evaluate($matches[2], $context)) {
+        $language = new ExpressionLanguage();
+        if (!$language->evaluate($matches[2], $context)) {
             return FormulaExpression::SKIP;
         }
-
         return $expression->evaluate($matches[1], $context);
     }
 }

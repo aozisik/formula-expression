@@ -7,7 +7,7 @@ class ConditionalsTest extends TestCase
     public function testItHandlesInlineConditionals()
     {
         $evaluator = new FormulaExpression();
-        $result = $evaluator->evaluate('apples if(oranges > 50)', [
+        $result = $evaluator->evaluate('apples if(oranges == 51)', [
             'apples' => 30,
             'oranges' => 51
         ]);
