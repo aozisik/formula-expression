@@ -6,6 +6,7 @@ use Swiftmade\FEL\Filters\BlockIf;
 use Swiftmade\FEL\Filters\InlineIf;
 use Swiftmade\FEL\Filters\SetVariable;
 
+use Swiftmade\FEL\Overriders\Collection;
 use Swiftmade\FEL\Overriders\Stringy;
 
 use Swiftmade\FEL\Contracts\RecastContract;
@@ -41,6 +42,7 @@ class FormulaExpression
     protected function registerDefaultOverriders()
     {
         $this->addOverrider(new Stringy);
+        $this->addOverrider(new Collection);
     }
 
     protected function removeNewLines($code)

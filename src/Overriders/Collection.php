@@ -2,29 +2,29 @@
 
 namespace Swiftmade\FEL\Overriders;
 
+use DusanKasan\Knapsack\Collection as KnapsackCollection;
 use Swiftmade\FEL\Contracts\RecastContract;
-use \Swiftmade\FEL\Support\Stringy as S;
 use Swiftmade\FEL\Contracts\OverriderContract;
 
-class Stringy implements OverriderContract, RecastContract
+class Collection implements OverriderContract, RecastContract
 {
     public function type()
     {
-        return 'string';
+        return 'array';
     }
 
     public function override($variable)
     {
-        return S::create($variable);
+        return new KnapsackCollection($variable);
     }
 
     public function resultType()
     {
-        return S::class;
+        return KnapsackCollection::class;
     }
 
     public function recast($result)
     {
-        return (string)$result;
+        return $result->toArray();
     }
 }

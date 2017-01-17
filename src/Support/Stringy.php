@@ -1,6 +1,6 @@
 <?php
 
-namespace Swiftmade\FEL\Stringy;
+namespace Swiftmade\FEL\Support;
 
 use Stringy\Stringy as S;
 

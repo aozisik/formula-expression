@@ -2,7 +2,8 @@
 
 namespace Swiftmade\FEL;
 
-use Swiftmade\FEL\Stringy\Stringy;
+use DusanKasan\Knapsack\Collection;
+use Swiftmade\FEL\Support\Stringy;
 
 class Helper
 {
@@ -14,5 +15,10 @@ class Helper
     public function str($str)
     {
         return Stringy::create($str);
+    }
+
+    public function collect(array $array)
+    {
+        return new Collection($array);
     }
 }

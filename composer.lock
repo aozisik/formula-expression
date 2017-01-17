@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2f78ff0031376a8ae4238fd9713f8bb0",
-    "content-hash": "f705b74198e6b819a0ee05c7ba72bb68",
+    "hash": "a046935d935b0400f97a92ff6381ab61",
+    "content-hash": "c295eb3c0b62e24496f46740e9e76580",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -62,6 +62,64 @@
                 "utils"
             ],
             "time": "2016-05-02 15:18:10"
+        },
+        {
+            "name": "dusank/knapsack",
+            "version": "8.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DusanKasan/Knapsack.git",
+                "reference": "24078b72beff714b7d71db78663e3e429ec4e788"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DusanKasan/Knapsack/zipball/24078b72beff714b7d71db78663e3e429ec4e788",
+                "reference": "24078b72beff714b7d71db78663e3e429ec4e788",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "ciaranmcnulty/phpspec-typehintedmethods": "^1.0",
+                "henrikbjorn/phpspec-code-coverage": "^2.0",
+                "phpmd/phpmd": "^2.0",
+                "phpspec/phpspec": "^2.0",
+                "phpunit/phpunit": "^5.0",
+                "squizlabs/php_codesniffer": "^2.0",
+                "symfony/console": "^2.7"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/collection_functions.php",
+                    "src/utility_functions.php"
+                ],
+                "psr-4": {
+                    "DusanKasan\\Knapsack\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dusan Kasan",
+                    "email": "dusan@kasan.sk",
+                    "homepage": "http://kasan.sk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Collection library for PHP",
+            "homepage": "https://github.com/DusanKasan/Knapsack",
+            "keywords": [
+                "collections",
+                "map",
+                "reduce",
+                "sequences"
+            ],
+            "time": "2016-06-09 11:06:15"
         },
         {
             "name": "psr/cache",
