@@ -13,12 +13,13 @@ class FormulaExpression
 {
     const SKIP = '_$$skip$$_';
 
+    protected $tuneOutput;
+    protected $filters = [];
     protected $expressionEngine;
 
-    protected $filters = [];
-
-    public function __construct()
+    public function __construct($tuneOutput = true)
     {
+        $this->tuneOutput = $tuneOutput;
         $this->expressionEngine = new ExpressionLanguage();
         $this->registerDefaultFilters();
     }
@@ -71,6 +72,9 @@ class FormulaExpression
 
     protected function output($result)
     {
+        if (!$this->tuneOutput) {
+            return $result;
+        }
         return (new Result($result))->output();
     }
 
@@ -79,7 +83,7 @@ class FormulaExpression
         foreach ($this->filters as $filter) {
             $matches = [];
             if (preg_match($filter->pattern(), $line, $matches)) {
-                return $filter->process($this, $matches, $context);
+                return $filter->process(new self(false), $matches, $context);
                 break;
             }
         }
