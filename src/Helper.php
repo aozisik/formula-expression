@@ -21,4 +21,14 @@ class Helper
     {
         return new Collection($array);
     }
+
+    public function replace(array $dictionary, $subject)
+    {
+        if (is_array($subject)) {
+            return array_map(function ($item) use ($dictionary) {
+                return $this->replace($dictionary, $item);
+            }, $subject);
+        }
+        return str_replace(array_keys($dictionary), array_values($dictionary), $subject);
+    }
 }

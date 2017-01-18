@@ -10,4 +10,8 @@ class Stringy extends S
     {
         return floatval($this->str);
     }
+
+    public function split($delimiter, $limit = null) {
+    	return explode($delimiter, $this->str);
+    }
 }
