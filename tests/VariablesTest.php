@@ -1,6 +1,6 @@
 <?php
 
-use Swiftmade\FEL\FormulaExpression;
+use Swiftmade\FEL\FormulaLanguage;
 
 class VariablesTest extends TestCase
 {
@@ -9,7 +9,7 @@ class VariablesTest extends TestCase
         $code = 'a = b + 5;' . PHP_EOL
             . 'a';
 
-        $evaluator = new FormulaExpression();
+        $evaluator = new FormulaLanguage();
         $result = $evaluator->evaluate($code, [
             'b' => 5
         ]);

@@ -2,7 +2,7 @@
 
 namespace Swiftmade\FEL\Filters;
 
-use Swiftmade\FEL\FormulaExpression;
+use Swiftmade\FEL\FormulaLanguage;
 use Swiftmade\FEL\Contracts\FilterContract;
 
 class SetVariable implements FilterContract
@@ -12,9 +12,9 @@ class SetVariable implements FilterContract
         return '/^([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\s?=(.*)/';
     }
 
-    public function process(FormulaExpression $expression, array $matches, array &$context)
+    public function process(FormulaLanguage $expression, array $matches, array &$context)
     {
         $context[trim($matches[1])] = $expression->evaluate(trim($matches[2]), $context);
-        return FormulaExpression::SKIP;
+        return FormulaLanguage::SKIP;
     }
 }

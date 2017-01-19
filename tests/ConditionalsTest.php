@@ -1,12 +1,12 @@
 <?php
 
-use Swiftmade\FEL\FormulaExpression;
+use Swiftmade\FEL\FormulaLanguage;
 
 class ConditionalsTest extends TestCase
 {
     public function testItHandlesInlineConditionals()
     {
-        $evaluator = new FormulaExpression();
+        $evaluator = new FormulaLanguage();
         $result = $evaluator->evaluate('apples if(oranges == 51)', [
             'apples' => 30,
             'oranges' => 51
@@ -17,7 +17,7 @@ class ConditionalsTest extends TestCase
 
     public function testFirstSatisfactoryConditionalWins()
     {
-        $evaluator = new FormulaExpression();
+        $evaluator = new FormulaLanguage();
         $result = $evaluator->evaluate('apples if(oranges > 50);' . PHP_EOL .
             'oranges if(apples > 20)', [
             'apples' => 30,
@@ -33,7 +33,7 @@ class ConditionalsTest extends TestCase
             . "\tapples" . PHP_EOL
             . "}";
 
-        $evaluator = new FormulaExpression();
+        $evaluator = new FormulaLanguage();
         $result = $evaluator->evaluate($code, [
             'apples' => 30,
             'oranges' => 51

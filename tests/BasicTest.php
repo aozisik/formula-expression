@@ -1,12 +1,12 @@
 <?php
 
-use Swiftmade\FEL\FormulaExpression;
+use Swiftmade\FEL\FormulaLanguage;
 
 class BasicTest extends TestCase
 {
     public function testItReturnsCorrectTypes()
     {
-        $evaluator = new FormulaExpression();
+        $evaluator = new FormulaLanguage();
 
         // String (single-quotes)
         $output = $evaluator->evaluate("'5'");
@@ -17,24 +17,24 @@ class BasicTest extends TestCase
         $this->assertTrue(is_string($output));
 
         // Integer
-        $evaluator = new FormulaExpression();
+        $evaluator = new FormulaLanguage();
         $output = $evaluator->evaluate('5');
         $this->assertTrue(is_int($output));
 
         // Boolean
-        $evaluator = new FormulaExpression();
+        $evaluator = new FormulaLanguage();
         $output = $evaluator->evaluate('true');
         $this->assertTrue(is_bool($output));
 
         // Null
-        $evaluator = new FormulaExpression();
+        $evaluator = new FormulaLanguage();
         $output = $evaluator->evaluate('null');
         $this->assertTrue(is_null($output));
     }
 
     public function testItReturnsArrays()
     {
-        $evaluator = new FormulaExpression();
+        $evaluator = new FormulaLanguage();
         $output = $evaluator->evaluate('[1, a, 3]', [
             'a' => 2
         ]);
@@ -43,17 +43,17 @@ class BasicTest extends TestCase
 
     public function testItCalculates()
     {
-        $evaluator = new FormulaExpression();
+        $evaluator = new FormulaLanguage();
         $this->assertEquals(21, $evaluator->evaluate('5 * 4 + 1'));
         // Calculate using variables
-        $evaluator = new FormulaExpression();
+        $evaluator = new FormulaLanguage();
         $output = $evaluator->evaluate('a + b + 3', [
             'a' => 5,
             'b' => 4
         ]);
         $this->assertEquals(12, $output);
         // Convert strings to numbers for mathematical operations
-        $evaluator = new FormulaExpression();
+        $evaluator = new FormulaLanguage();
         $output = $evaluator->evaluate('a + b', [
             'a' => '5',
             'b' => 4

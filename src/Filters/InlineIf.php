@@ -2,7 +2,7 @@
 
 namespace Swiftmade\FEL\Filters;
 
-use Swiftmade\FEL\FormulaExpression;
+use Swiftmade\FEL\FormulaLanguage;
 use Swiftmade\FEL\Contracts\FilterContract;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
@@ -13,7 +13,7 @@ class InlineIf implements FilterContract
         return '/(.*) if\((.*)\)/';
     }
 
-    public function process(FormulaExpression $expression, array $matches, array &$context)
+    public function process(FormulaLanguage $expression, array $matches, array &$context)
     {
         $language = new ExpressionLanguage();
         if (!$language->evaluate($matches[2], $context)) {

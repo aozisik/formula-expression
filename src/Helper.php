@@ -7,6 +7,13 @@ use LaravelCollect\Support\Collection;
 
 class Helper
 {
+    protected $context;
+
+    public function __construct(&$context)
+    {
+        $this->context = $context;
+    }
+
     /**
      * @param $str
      * Converts a string to Stringy object
@@ -20,6 +27,12 @@ class Helper
     public function collect(array $array)
     {
         return new Collection($array);
+    }
+
+    public function set($variable, $value)
+    {
+        $this->context[$variable] = $value;
+        return FormulaLanguage::SKIP;
     }
 
     public function replace(array $dictionary, $subject)

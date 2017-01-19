@@ -10,16 +10,18 @@ use Swiftmade\FEL\Contracts\FilterContract;
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-class FormulaExpression
+class FormulaLanguage
 {
     const SKIP = '_$$skip$$_';
 
+    protected $lexer;
     protected $tuneOutput;
     protected $filters = [];
     protected $expressionEngine;
 
     public function __construct($tuneOutput = true)
     {
+        $this->lexer = new Lexer();
         $this->tuneOutput = $tuneOutput;
         $this->expressionEngine = new ExpressionLanguage();
         $this->registerDefaultFilters();
@@ -51,17 +53,21 @@ class FormulaExpression
 
     public function evaluate($code, array $variables = [])
     {
+        if($this->tuneOutput) {
+            $this->lexer->tokenize($code);
+        }
+
         $code = $this->optimize($code);
 
         if (!isset($variables['_'])) {
-            $variables['_'] = new Helper();
+            $variables['_'] = new Helper($variables);
         }
 
         $result = null;
         $lines = explode(';', $code);
         foreach ($lines as $line) {
             $result = $this->evaluateLine($line, $variables);
-            if ($result === FormulaExpression::SKIP) {
+            if ($result === FormulaLanguage::SKIP) {
                 $result = null;
                 continue;
             } else {
