@@ -8,7 +8,7 @@ class ForeachTest extends TestCase
     {
         $code = '_.set("fullname", "");' . PHP_EOL
             . "foreach(names as name) {" . PHP_EOL
-            . "_.set('fullname', fullname ~ ' ' ~ name);" . PHP_EOL
+            . "_.set('fullname', fullname ~ ' ' ~ name)" . PHP_EOL
             . "}";
 
         $evaluator = new FormulaLanguage();

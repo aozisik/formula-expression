@@ -80,8 +80,9 @@ class Lexer
             throw new SyntaxError(sprintf('Unclosed "%s"', $expect), $cur);
         }
 
-        print_r($tokens);
-
+        if (!empty($this->buffer)) {
+            $tokens[] = new Token(Token::EXPRESSION_TYPE, $buffer, $cursor + 1);
+        }
         return new TokenStream($tokens);
     }
 }
