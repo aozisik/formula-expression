@@ -31,4 +31,11 @@ class Helper
         }
         return str_replace(array_keys($dictionary), array_values($dictionary), $subject);
     }
+
+    public function select(array $source, array $keys)
+    {
+        return array_map(function ($item) use ($keys) {
+            return array_only($item, $keys);
+        }, $source);
+    }
 }

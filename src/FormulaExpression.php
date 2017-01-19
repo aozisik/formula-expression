@@ -2,6 +2,7 @@
 
 namespace Swiftmade\FEL;
 
+use Swiftmade\FEL\Filters\BlockForeach;
 use Swiftmade\FEL\Filters\BlockIf;
 use Swiftmade\FEL\Filters\InlineIf;
 use Swiftmade\FEL\Filters\SetVariable;
@@ -29,6 +30,7 @@ class FormulaExpression
         $this->addFilter(new BlockIf);
         $this->addFilter(new InlineIf);
         $this->addFilter(new SetVariable);
+        $this->addFilter(new BlockForeach);
     }
 
     protected function removeNewLines($code)
