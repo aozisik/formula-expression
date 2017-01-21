@@ -72,9 +72,9 @@ class Lexer
                 continue;
             }
 
-            if (preg_match('/(if|foreach)(\s?)\((?:(?!\{).)*\)/A', $expression, $match, null, $this->cursor)) {
+            if (preg_match('/(if|foreach)\s?\(((?:(?!\{).)*)\)/A', $expression, $match, null, $this->cursor)) {
                 $bracketLevel = 0;
-                $this->addToken(new Token(Token::CONTROL_TYPE, $match[1], $this->cursor + 1));
+                $this->addToken(new Token(Token::CONTROL_TYPE, $match[1] . '|' . $match[2], $this->cursor + 1));
                 $this->cursor += strlen($match[0]);
             } elseif (false !== strpos('{', $char)) {
                 // opening bracket

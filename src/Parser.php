@@ -2,6 +2,9 @@
 
 namespace Swiftmade\FEL;
 
+use Swiftmade\FEL\Controls\Each;
+use Swiftmade\FEL\Controls\Condition;
+
 use Symfony\Component\ExpressionLanguage\SyntaxError;
 use Symfony\Component\ExpressionLanguage\TokenStream;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -10,9 +13,21 @@ class Parser
 {
     const SKIP = '_$$skip$$_';
 
-    protected $names;
+    /**
+     * @var TokenStream
+     */
     protected $stream;
+    protected $names;
     protected $evaluator;
+    protected $controls = [];
+
+    public function __construct()
+    {
+        $this->controls = [
+            'foreach' => new Each,
+            'if' => new Condition,
+        ];
+    }
 
     protected function enhanceNames()
     {
@@ -79,6 +94,30 @@ class Parser
 
     protected function handleControl($token)
     {
-        return Parser::SKIP;
+        $pos = strpos($token->value, '|');
+        $command = substr($token->value, 0, $pos);
+        $expression = substr($token->value, $pos + 1, strlen($token) - ($pos + 1));
+
+        if (!isset($this->controls[$command])) {
+            throw new SyntaxError('Unknown control "' . $command . '"', $token->cursor);
+        }
+
+        $tokens = [];
+        $control = $this->controls[$command];
+
+        $this->stream->next();
+        $this->stream->expect('punctuation', '{');
+        $this->stream->next();
+
+        while ($this->stream->current->test('punctuation', '}')) {
+            $tokens[] = $this->stream->current;
+            $this->stream->next();
+        }
+
+        return $control->run(
+            $expression,
+            new TokenStream($tokens),
+            $this
+        );
     }
 }
