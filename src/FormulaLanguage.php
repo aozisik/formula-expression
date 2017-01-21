@@ -15,6 +15,7 @@ class FormulaLanguage
     const SKIP = '_$$skip$$_';
 
     protected $lexer;
+    protected $parser;
     protected $tuneOutput;
     protected $filters = [];
     protected $expressionEngine;
@@ -22,6 +23,8 @@ class FormulaLanguage
     public function __construct($tuneOutput = true)
     {
         $this->lexer = new Lexer();
+        $this->parser = new Parser();
+
         $this->tuneOutput = $tuneOutput;
         $this->expressionEngine = new ExpressionLanguage();
         $this->registerDefaultFilters();
@@ -53,8 +56,9 @@ class FormulaLanguage
 
     public function evaluate($code, array $variables = [])
     {
-        if($this->tuneOutput) {
-            $this->lexer->tokenize($code);
+
+        if ($this->tuneOutput) {
+            $this->parser->parse($this->lexer->tokenize($code), $variables);
         }
 
         $code = $this->optimize($code);

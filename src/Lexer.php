@@ -7,7 +7,6 @@ use Symfony\Component\ExpressionLanguage\TokenStream;
 
 class Lexer
 {
-
     public function tokenize($expression)
     {
         $expression = str_replace(array("\r", "\n", "\t", "\v", "\f"), ' ', $expression);
@@ -24,12 +23,7 @@ class Lexer
                 continue;
             }
 
-            echo $expression[$cursor] . PHP_EOL;
-
             if (preg_match('/(if|foreach)(\s?)\((?:(?!\{).)*\)/A', $expression, $match, null, $cursor)) {
-                $control = $match[1];
-                $directive = $match[3];
-                echo $match[0];
                 $tokens[] = new Token(Token::CONTROL_TYPE, $match[1], $cursor + 1);
                 $cursor += strlen($match[0]);
             } elseif (false !== strpos('([{', $expression[$cursor])) {
