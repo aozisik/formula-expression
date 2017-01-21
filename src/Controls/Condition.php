@@ -17,7 +17,9 @@ class Condition implements ControlContract
         }
 
         $parser = new Parser();
-        return $parser->parse(new TokenStream($tokens), $names);
+        $result = $parser->parse(new TokenStream($tokens), $names);
+        $names = $parser->names;
+        return $result;
     }
 }
 
