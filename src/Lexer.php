@@ -3,7 +3,6 @@
 namespace Swiftmade\FEL;
 
 use Symfony\Component\ExpressionLanguage\SyntaxError;
-use Symfony\Component\ExpressionLanguage\TokenStream;
 
 class Lexer
 {

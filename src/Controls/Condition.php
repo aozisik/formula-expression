@@ -2,11 +2,10 @@
 
 namespace Swiftmade\FEL\Controls;
 
-use Swiftmade\FEL\Token;
 use Swiftmade\FEL\Parser;
+use Swiftmade\FEL\TokenStream;
 use Swiftmade\FEL\Contracts\ControlContract;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use Symfony\Component\ExpressionLanguage\TokenStream;
 
 class Condition implements ControlContract
 {

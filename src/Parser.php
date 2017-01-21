@@ -6,7 +6,6 @@ use Swiftmade\FEL\Controls\Each;
 use Swiftmade\FEL\Controls\Condition;
 
 use Symfony\Component\ExpressionLanguage\SyntaxError;
-use Symfony\Component\ExpressionLanguage\TokenStream;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class Parser
