@@ -75,7 +75,7 @@ class Lexer
                 continue;
             }
 
-            if (preg_match('/(if|foreach)\s?\(((?:(?!\{|;).)*)\)/A', $expression, $match, null, $this->cursor)) {
+            if (preg_match('/(if|elseif|foreach)\s?\(((?:(?!\{|;).)*)\)/A', $expression, $match, null, $this->cursor)) {
                 if (empty($this->buffer)) {
                     // This is not an inline control, so let's expect a bracket
                     $bracketLevel = is_null($bracketLevel) ? 0 : $bracketLevel + 1;

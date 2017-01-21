@@ -5,6 +5,7 @@ namespace Swiftmade\FEL;
 use Swiftmade\FEL\Controls\Each;
 use Swiftmade\FEL\Controls\Condition;
 
+use Swiftmade\FEL\Controls\ElseCondition;
 use Swiftmade\FEL\Optimizers\InlineIf;
 use Symfony\Component\ExpressionLanguage\SyntaxError;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -27,6 +28,7 @@ class Parser
         $this->controls = [
             'foreach' => new Each,
             'if' => new Condition,
+            'elseif' => new ElseCondition
         ];
 
         $this->optimizers = [

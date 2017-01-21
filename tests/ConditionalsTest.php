@@ -68,4 +68,19 @@ class ConditionalsTest extends TestCase
             'c' => 4
         ]));
     }
+
+    public function testItHandlesElseIf()
+    {
+        $code = 'if(a == 6) {' . PHP_EOL
+            . 'b = 2;' . PHP_EOL
+            . '} elseif(a == 6) {' . PHP_EOL
+            . 'b = 3;'
+            . '}b;';
+
+        $evaluator = new FormulaLanguage();
+        $this->assertEquals(2, $evaluator->evaluate(
+            $code, [
+            'a' => 6
+        ]));
+    }
 }
