@@ -12,7 +12,6 @@ class Lexer
 
     protected $cursor;
     protected $tokens;
-    protected $brackets;
 
     protected function optimizeExpression($expression)
     {
@@ -22,7 +21,7 @@ class Lexer
     protected function buffer($chars)
     {
         if (empty($this->buffer)) {
-            $this->bufferCursor = $this->cursor;
+            $this->bufferCursor = $this->cursor + 1;
         }
         $this->buffer .= $chars;
         $this->cursor += strlen($chars);
@@ -34,20 +33,35 @@ class Lexer
         $this->bufferCursor = null;
     }
 
+    protected function flushBuffer()
+    {
+        $buffer = $this->buffer;
+        $this->resetBuffer();
+        $this->addToken(new Token(Token::EXPRESSION_TYPE, $buffer, $this->bufferCursor));
+    }
+
+    protected function addToken(Token $token)
+    {
+        if (!empty($this->buffer)) {
+            $this->flushBuffer();
+        }
+        $this->tokens[] = $token;
+    }
+
     public function tokenize($expression)
     {
         $expression = str_replace(array("\r", "\n", "\t", "\v", "\f"), ' ', $expression);
-
-        $this->cursor = 0;
-        $this->buffer = '';
-        $this->tokens = [];
-        $this->brackets = [];
         $end = strlen($expression);
+
+        $brackets = [];
+        $this->cursor = 0;
+        $this->tokens = [];
+        $this->buffer = '';
+        $bracketLevel = null;
 
         while ($this->cursor < $end) {
 
             $char = $expression[$this->cursor];
-
             if (' ' == $char) {
                 // TODO: Possibly append the whitespace to buffer?
                 ++$this->cursor;
@@ -55,40 +69,46 @@ class Lexer
             }
 
             if (preg_match('/(if|foreach)(\s?)\((?:(?!\{).)*\)/A', $expression, $match, null, $this->cursor)) {
-                $tokens[] = new Token(Token::CONTROL_TYPE, $match[1], $this->cursor + 1);
+                $bracketLevel = 0;
+                $this->addToken(new Token(Token::CONTROL_TYPE, $match[1], $this->cursor + 1));
                 $this->cursor += strlen($match[0]);
-            } elseif (false !== strpos('([{', $char)) {
+            } elseif (false !== strpos('{', $char)) {
                 // opening bracket
                 $brackets[] = array($char, $this->cursor);
-                if (empty($buffer)) {
-                    $tokens[] = new Token(Token::PUNCTUATION_TYPE, $char, $this->cursor + 1);
+                if (!is_null($bracketLevel)) {
+                    if ($bracketLevel === 0) {
+                        $this->addToken(new Token(Token::PUNCTUATION_TYPE, '{', $this->cursor + 1));
+                    }
+                    ++$bracketLevel;
                 } else {
-                    $buffer .= $char;
+                    $this->buffer($char);
                 }
                 ++$this->cursor;
-            } elseif (false !== strpos(')]}', $char)) {
+            } elseif (false !== strpos('}', $char)) {
                 // closing bracket
                 if (empty($brackets)) {
                     throw new SyntaxError(sprintf('Unexpected "%s"', $char), $this->cursor);
                 }
-
                 list($expect, $cur) = array_pop($brackets);
-                if ($char != strtr($expect, '([{', ')]}')) {
+                if ($char != strtr($expect, '{', '}')) {
                     throw new SyntaxError(sprintf('Unclosed "%s"', $expect), $cur);
                 }
 
-                if (empty($buffer)) {
-                    $tokens[] = new Token(Token::PUNCTUATION_TYPE, $char, $this->cursor + 1);
+                if (is_null($bracketLevel)) {
+                    $this->buffer($char);
                 } else {
-                    $buffer .= $char;
+                    --$bracketLevel;
+                    if ($bracketLevel === 0) {
+                        $this->addToken(new Token(Token::PUNCTUATION_TYPE, $char, $this->cursor + 1));
+                        $bracketLevel = null;
+                    }
                 }
                 ++$this->cursor;
             } elseif (preg_match('/"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"|\'([^\'\\\\]*(?:\\\\.[^\'\\\\]*)*)\'/As', $expression, $match, null, $this->cursor)) {
                 // strings
                 $this->buffer($match[0]);
             } elseif ($char === ';') {
-                $tokens[] = new Token(Token::EXPRESSION_TYPE, $this->buffer, $this->cursor + 1);
-                $this->resetBuffer();
+                $this->flushBuffer();
                 ++$this->cursor;
             } else {
                 // unlexable
@@ -101,12 +121,7 @@ class Lexer
             throw new SyntaxError(sprintf('Unclosed "%s"', $expect), $cur);
         }
 
-        if (!empty($this->buffer)) {
-            $tokens[] = new Token(Token::EXPRESSION_TYPE, $this->buffer, $this->cursor + 1);
-            ++$this->cursor;
-        }
-
-        $tokens[] = new Token(Token::EOF_TYPE, null, $this->cursor + 1);
-        return new TokenStream($tokens);
+        $this->addToken(new Token(Token::EOF_TYPE, null, $this->cursor + 1));
+        return new TokenStream($this->tokens);
     }
 }

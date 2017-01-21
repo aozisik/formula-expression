@@ -15,6 +15,7 @@ class Parser
             echo $token->type;
 
             if ($tokenStream->isEOF()) {
+                echo PHP_EOL;
                 break;
             }
             $tokenStream->next();
