@@ -38,4 +38,12 @@ class Helper
             return array_only($item, $keys);
         }, $source);
     }
+
+    public function enumerate(array $array)
+    {
+        if (isset($array[0])) {
+            return $array;
+        }
+        return [$array];
+    }
 }
