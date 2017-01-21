@@ -49,6 +49,10 @@ class FormulaLanguage
 
     protected function returnResult($result)
     {
+        $nullValues = [Parser::SKIP, Parser::IF_FALSE];
+        if (gettype($result) === 'string' and in_array($result, $nullValues)) {
+            return null;
+        }
         $resultType = $this->resultType($result);
         if (isset($this->typeCasts[$resultType])) {
             return $this->typeCasts[$resultType]->cast($result);
