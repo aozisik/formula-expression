@@ -86,6 +86,6 @@ class TokenStream
 
     public function remaining()
     {
-        return count($this->tokens) - $this->position + 1;
+        return count($this->tokens) - ($this->position + 1);
     }
 }

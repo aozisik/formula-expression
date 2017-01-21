@@ -2,9 +2,9 @@
 
 namespace Swiftmade\FEL\Optimizers;
 
-use Swiftmade\FEL\Contracts\OptimizerContract;
 use Swiftmade\FEL\Token;
 use Swiftmade\FEL\TokenStream;
+use Swiftmade\FEL\Contracts\OptimizerContract;
 
 class InlineIf implements OptimizerContract
 {
@@ -23,12 +23,11 @@ class InlineIf implements OptimizerContract
 
     public function optimize(TokenStream $stream, array &$tokens)
     {
-        if ($stream->current->type !== Token::EXPRESSION_TYPE || $stream->remaining() <= 2) {
+        if ($stream->current->type !== Token::EXPRESSION_TYPE || $stream->remaining() < 2) {
             return false;
         }
 
         $this->retrieveTokens($stream);
-
         if (!$this->hasConditional() or !$this->hasNoFollowingBracket()) {
             $stream->rewind(2);
             return false;
@@ -41,7 +40,7 @@ class InlineIf implements OptimizerContract
         $tokens[] = new Token(Token::PUNCTUATION_TYPE, '}', $this->if->cursor + 2);
         return true;
     }
-    
+
     protected function retrieveTokens(TokenStream $stream)
     {
         $this->instruction = $stream->current;
