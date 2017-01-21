@@ -13,6 +13,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 class Parser
 {
     const SKIP = '_$$skip$$_';
+    const IF_FALSE = '__$$if_false$$__';
 
     public $names;
     /**
@@ -20,6 +21,7 @@ class Parser
      */
     protected $stream;
     protected $evaluator;
+    protected $lastResult;
     protected $controls = [];
     protected $optimizers = [];
 
@@ -66,8 +68,12 @@ class Parser
         $this->stream = $this->optimizeStream($tokenStream);
 
         $returnableValue = Parser::SKIP;
+        $skipValues = [
+            Parser::SKIP,
+            Parser::IF_FALSE,
+        ];
 
-        while ($returnableValue === Parser::SKIP) {
+        while (in_array($returnableValue, $skipValues)) {
             $token = $this->stream->current;
 
             switch ($token->type) {
@@ -85,10 +91,13 @@ class Parser
                 default:
                     throw new SyntaxError("Unexpected token", $token->cursor);
             }
-
+            // Log the outcome
+            $this->lastResult = [
+                'token' => $token,
+                'result' => $returnableValue
+            ];
             $this->stream->next();
         }
-
         return $returnableValue;
     }
 
@@ -117,9 +126,11 @@ class Parser
             throw new SyntaxError('Unknown control "' . $command . '"', $token->cursor);
         }
 
-        $tokens = [];
-        $control = $this->controls[$command];
+        if (method_exists($this->controls[$command], 'lastResult')) {
+            $this->controls[$command]->lastResult($this->lastResult);
+        }
 
+        $tokens = [];
         $this->stream->next();
         $this->stream->expect('punctuation', '{');
         $cursor = $this->stream->current->cursor;
@@ -140,6 +151,6 @@ class Parser
         }
 
         $tokens[] = new Token(Token::EOF_TYPE, null, $cursor + 1);
-        return $control->run($expression, $tokens, $this->names);
+        return $this->controls[$command]->run($expression, $tokens, $this->names);
     }
 }

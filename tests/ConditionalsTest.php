@@ -75,12 +75,20 @@ class ConditionalsTest extends TestCase
             . 'b = 2;' . PHP_EOL
             . '} elseif(a == 6) {' . PHP_EOL
             . 'b = 3;'
+            . '} elseif(a == 7) {' . PHP_EOL
+            . 'b = 5;' . PHP_EOL
             . '}b;';
 
         $evaluator = new FormulaLanguage();
         $this->assertEquals(2, $evaluator->evaluate(
             $code, [
             'a' => 6
+        ]));
+
+        $evaluator = new FormulaLanguage();
+        $this->assertEquals(5, $evaluator->evaluate(
+            $code, [
+            'a' => 7
         ]));
     }
 }

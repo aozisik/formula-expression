@@ -13,7 +13,7 @@ class Condition implements ControlContract
     {
         $expressionLanguage = new ExpressionLanguage();
         if (!$expressionLanguage->evaluate($directive, $names)) {
-            return Parser::SKIP;
+            return Parser::IF_FALSE;
         }
 
         $parser = new Parser();
