@@ -41,4 +41,15 @@ class ConditionalsTest extends TestCase
 
         $this->assertEquals(30, $result);
     }
+
+    public function testItAllowsParenthesesInsideConditional()
+    {
+        $code = 'test if((5+5) + (3*(2+1)) == 19)';
+        $evaluator = new FormulaLanguage();
+        $this->assertEquals('yep', $evaluator->evaluate(
+            $code, [
+            'test' => 'yep'
+        ]));
+
+    }
 }
