@@ -135,7 +135,6 @@ class Lexer
         }
 
         $this->addToken(new Token(Token::EOF_TYPE, null, $this->cursor + 1));
-        print_r($this->tokens);
         return new TokenStream($this->tokens);
     }
 }

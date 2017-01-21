@@ -5,6 +5,7 @@ namespace Swiftmade\FEL;
 use Swiftmade\FEL\Controls\Each;
 use Swiftmade\FEL\Controls\Condition;
 
+use Swiftmade\FEL\Optimizers\InlineIf;
 use Symfony\Component\ExpressionLanguage\SyntaxError;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
@@ -19,12 +20,17 @@ class Parser
     protected $stream;
     protected $evaluator;
     protected $controls = [];
+    protected $optimizers = [];
 
     public function __construct()
     {
         $this->controls = [
             'foreach' => new Each,
             'if' => new Condition,
+        ];
+
+        $this->optimizers = [
+            new InlineIf
         ];
     }
 
@@ -35,11 +41,27 @@ class Parser
         }
     }
 
+    protected function optimizeStream(TokenStream $stream)
+    {
+        foreach ($this->optimizers as $optimizer) {
+            $tokens = [];
+            while ($stream->current->type !== Token::EOF_TYPE) {
+                if (!$optimizer->optimize($stream, $tokens)) {
+                    $tokens[] = $stream->current;
+                }
+                $stream->next();
+            }
+            $tokens[] = $stream->current;
+            $stream = new TokenStream($tokens);
+        }
+        return $stream;
+    }
+
     public function parse(TokenStream $tokenStream, array $names = null)
     {
         $this->names = $names;
-        $this->stream = $tokenStream;
         $this->enhanceNames();
+        $this->stream = $this->optimizeStream($tokenStream);
 
         $returnableValue = Parser::SKIP;
 
