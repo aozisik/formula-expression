@@ -50,6 +50,22 @@ class ConditionalsTest extends TestCase
             $code, [
             'test' => 'yep'
         ]));
+    }
 
+    public function testItHandlesNestedConditionals()
+    {
+        $code = 'if(a == 5) {' . PHP_EOL
+            . 'if(b == 3) {' . PHP_EOL
+            . 'if(c == 4) {' . PHP_EOL
+            . 'd = 5;' . PHP_EOL
+            . '}}}d;';
+
+        $evaluator = new FormulaLanguage();
+        $this->assertEquals(5, $evaluator->evaluate(
+            $code, [
+            'a' => 5,
+            'b' => 3,
+            'c' => 4
+        ]));
     }
 }

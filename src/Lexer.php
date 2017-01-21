@@ -63,6 +63,7 @@ class Lexer
         $this->cursor = 0;
         $this->tokens = [];
         $this->buffer = '';
+        $controlBrackets = 0;
         $bracketLevel = null;
 
         while ($this->cursor < $end) {
@@ -77,7 +78,8 @@ class Lexer
             if (preg_match('/(if|foreach)\s?\(((?:(?!\{|;).)*)\)/A', $expression, $match, null, $this->cursor)) {
                 if (empty($this->buffer)) {
                     // This is not an inline control, so let's expect a bracket
-                    $bracketLevel = 0;
+                    $bracketLevel = is_null($bracketLevel) ? 0 : $bracketLevel + 1;
+                    ++$controlBrackets;
                 }
                 $this->addToken(new Token(Token::CONTROL_TYPE, $match[1] . '|' . $match[2], $this->cursor + 1));
                 $this->cursor += strlen($match[0]);
@@ -85,7 +87,7 @@ class Lexer
                 // opening bracket
                 $brackets[] = array($char, $this->cursor);
                 if (!is_null($bracketLevel)) {
-                    if ($bracketLevel === 0) {
+                    if ($controlBrackets > 0) {
                         $this->addToken(new Token(Token::PUNCTUATION_TYPE, '{', $this->cursor + 1));
                     }
                     ++$bracketLevel;
@@ -107,9 +109,9 @@ class Lexer
                     $this->buffer($char);
                 } else {
                     --$bracketLevel;
-                    if ($bracketLevel === 0) {
+                    if ($controlBrackets > 0) {
                         $this->addToken(new Token(Token::PUNCTUATION_TYPE, $char, $this->cursor + 1));
-                        $bracketLevel = null;
+                        --$controlBrackets;
                     }
                 }
                 ++$this->cursor;

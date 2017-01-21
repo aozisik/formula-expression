@@ -121,8 +121,17 @@ class Parser
         $this->stream->next();
         $this->stream->expect('punctuation', '{');
         $cursor = $this->stream->current->cursor;
+        $level = 1;
 
-        while (!$this->stream->current->test('punctuation', '}')) {
+        while ($level > 0) {
+            if ($this->stream->current->test('punctuation', '}')) {
+                --$level;
+            } else if ($this->stream->current->test('punctuation', '{')) {
+                ++$level;
+            }
+            if ($level === 0) {
+                break;
+            }
             $tokens[] = $this->stream->current;
             $cursor = $this->stream->current->cursor;
             $this->stream->next();
