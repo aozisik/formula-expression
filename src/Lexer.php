@@ -15,7 +15,11 @@ class Lexer
 
     protected function optimizeExpression($expression)
     {
-        return str_replace(array("\r", "\n", "\t", "\v", "\f"), ' ', $expression);
+        $expression = str_replace(array("\r", "\n", "\t", "\v", "\f"), ' ', $expression);
+        if ($expression[strlen($expression - 1)] !== ';') {
+            $expression .= ';';
+        }
+        return $expression;
     }
 
     protected function buffer($chars)
@@ -104,8 +108,12 @@ class Lexer
                     }
                 }
                 ++$this->cursor;
+            } else if (preg_match('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\s=\s(.*)(;)(?=(?:[^"|\']|"[^"|\']*")*$)/AU', $expression, $match, null, $this->cursor)) {
+                // Variable assignments
+                $this->addToken(new Token(Token::ASSIGNMENT_TYPE, $match[1] . '=' . $match[2], $this->cursor + 1));
+                $this->cursor += strlen($match[0]);
             } elseif (preg_match('/"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"|\'([^\'\\\\]*(?:\\\\.[^\'\\\\]*)*)\'/As', $expression, $match, null, $this->cursor)) {
-                // strings
+                // prevent catching semi colons inside strings
                 $this->buffer($match[0]);
             } elseif ($char === ';') {
                 $this->flushBuffer();

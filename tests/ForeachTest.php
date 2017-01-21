@@ -6,9 +6,9 @@ class ForeachTest extends TestCase
 {
     public function testItHandlesForeachLoops()
     {
-        $code = '_.set("fullname", "");' . PHP_EOL
+        $code = 'fullname = "";' . PHP_EOL
             . "foreach(names as name) {" . PHP_EOL
-            . "_.set('fullname', fullname ~ ' ' ~ name)" . PHP_EOL
+            . "fullname = fullname ~ ' ' ~ name;" . PHP_EOL
             . "}";
 
         $evaluator = new FormulaLanguage();
