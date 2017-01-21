@@ -111,8 +111,10 @@ class Parser
 
     protected function handleAssignment($token)
     {
-        $params = explode('=', $token->value);
-        $this->names[$params[0]] = $this->evaluate($params[1], $this->names);
+        $pos = strpos($token->value, '=');
+        $variable = substr($token->value, 0, $pos);
+        $expression = substr($token->value, $pos + 1, strlen($token) - ($pos + 1));
+        $this->names[$variable] = $this->evaluate($expression, $this->names);
         return Parser::SKIP;
     }
 
