@@ -9,7 +9,8 @@ class ForeachTest extends TestCase
         $code = 'fullname = "";' . PHP_EOL
             . "foreach(names as name) {" . PHP_EOL
             . 'fullname = fullname ~ " " ~ name;' . PHP_EOL
-            . "}";
+            . "}" . PHP_EOL
+            . '_.str(fullname).trim();';
 
         $evaluator = new FormulaLanguage();
         $result = $evaluator->evaluate($code, [

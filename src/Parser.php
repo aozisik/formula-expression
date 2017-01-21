@@ -13,11 +13,11 @@ class Parser
 {
     const SKIP = '_$$skip$$_';
 
+    public $names;
     /**
      * @var TokenStream
      */
     protected $stream;
-    protected $names;
     protected $evaluator;
     protected $controls = [];
 
@@ -36,7 +36,7 @@ class Parser
         }
     }
 
-    public function parse(TokenStream $tokenStream, array $names)
+    public function parse(TokenStream $tokenStream, array $names = null)
     {
         $this->names = $names;
         $this->stream = $tokenStream;
@@ -44,17 +44,8 @@ class Parser
 
         $returnableValue = Parser::SKIP;
 
-        $expectedTypes = [
-            Token::ASSIGNMENT_TYPE,
-            Token::CONTROL_TYPE,
-            Token::EXPRESSION_TYPE
-        ];
-
         while ($returnableValue === Parser::SKIP) {
             $token = $this->stream->current;
-            if (!in_array($token->type, $expectedTypes)) {
-                throw new SyntaxError("Unexpected token", $token->cursor);
-            }
 
             switch ($token->type) {
                 case Token::ASSIGNMENT_TYPE:
@@ -66,11 +57,12 @@ class Parser
                 case Token::CONTROL_TYPE:
                     $returnableValue = $this->handleControl($token);
                     break;
+                case Token::EOF_TYPE:
+                    break(2);
+                default:
+                    throw new SyntaxError("Unexpected token", $token->cursor);
             }
 
-            if ($this->stream->isEOF()) {
-                break;
-            }
             $this->stream->next();
         }
 
@@ -107,17 +99,15 @@ class Parser
 
         $this->stream->next();
         $this->stream->expect('punctuation', '{');
-        $this->stream->next();
+        $cursor = $this->stream->current->cursor;
 
-        while ($this->stream->current->test('punctuation', '}')) {
+        while (!$this->stream->current->test('punctuation', '}')) {
             $tokens[] = $this->stream->current;
+            $cursor = $this->stream->current->cursor;
             $this->stream->next();
         }
 
-        return $control->run(
-            $expression,
-            new TokenStream($tokens),
-            $this
-        );
+        $tokens[] = new Token(Token::EOF_TYPE, null, $cursor + 1);
+        return $control->run($expression, $tokens, $this->names);
     }
 }
