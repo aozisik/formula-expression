@@ -18,13 +18,13 @@ class ConditionalsTest extends TestCase
     public function testFirstSatisfactoryConditionalWins()
     {
         $evaluator = new FormulaLanguage();
-        $result = $evaluator->evaluate('apples if(oranges > 50);' . PHP_EOL .
+        $result = $evaluator->evaluate('apples if(oranges > 52);' . PHP_EOL .
             'oranges if(apples > 20)', [
             'apples' => 30,
             'oranges' => 51
         ]);
 
-        $this->assertEquals(30, $result);
+        $this->assertEquals(51, $result);
     }
 
     public function testItHandlesBlockConditionals()

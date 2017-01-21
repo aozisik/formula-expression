@@ -39,8 +39,11 @@ class Lexer
 
     protected function flushBuffer()
     {
-        $buffer = $this->buffer;
+        $buffer = trim($this->buffer);
         $this->resetBuffer();
+        if (empty($buffer)) {
+            return;
+        }
         $this->addToken(new Token(Token::EXPRESSION_TYPE, $buffer, $this->bufferCursor));
     }
 
@@ -72,8 +75,11 @@ class Lexer
                 continue;
             }
 
-            if (preg_match('/(if|foreach)\s?\(((?:(?!\{).)*)\)/A', $expression, $match, null, $this->cursor)) {
-                $bracketLevel = 0;
+            if (preg_match('/(if|foreach)\s?\(((?:(?!\{).)*)\)/AU', $expression, $match, null, $this->cursor)) {
+                if (empty($this->buffer)) {
+                    // This is not an inline control, so let's expect a bracket
+                    $bracketLevel = 0;
+                }
                 $this->addToken(new Token(Token::CONTROL_TYPE, $match[1] . '|' . $match[2], $this->cursor + 1));
                 $this->cursor += strlen($match[0]);
             } elseif (false !== strpos('{', $char)) {
@@ -130,6 +136,7 @@ class Lexer
         }
 
         $this->addToken(new Token(Token::EOF_TYPE, null, $this->cursor + 1));
+        print_r($this->tokens);
         return new TokenStream($this->tokens);
     }
 }
