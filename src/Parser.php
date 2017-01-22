@@ -2,13 +2,20 @@
 
 namespace Swiftmade\FEL;
 
-use Swiftmade\FEL\Controls\Each;
-use Swiftmade\FEL\Controls\Condition;
-
-use Swiftmade\FEL\Controls\ElseCondition;
-use Swiftmade\FEL\Optimizers\InlineIf;
 use Symfony\Component\ExpressionLanguage\SyntaxError;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+
+/*
+ * Controls
+ */
+use Swiftmade\FEL\Controls\Each;
+use Swiftmade\FEL\Controls\Condition;
+use Swiftmade\FEL\Controls\ElseCondition;
+
+/*
+ * Pre-parse Optimizers
+ */
+use Swiftmade\FEL\Optimizers\InlineIf;
 
 class Parser
 {

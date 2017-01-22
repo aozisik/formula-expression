@@ -35,7 +35,11 @@ class Helper
     public function select(array $source, array $keys)
     {
         return array_map(function ($item) use ($keys) {
-            return array_only($item, $keys);
+            $values = [];
+            foreach ($keys as $key) {
+                $values[] = array_get($item, $key);
+            }
+            return $values;
         }, $source);
     }
 
