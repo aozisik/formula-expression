@@ -113,7 +113,13 @@ class Parser
         if (!isset($this->evaluator)) {
             $this->evaluator = new ExpressionLanguage();
         }
-        return $this->evaluator->evaluate($expression, $names);
+        $skip = false;
+        if(substr($expression, 0, 1) === '#') {
+            $skip = true;
+            $expression = substr($expression, 1, strlen($expression) - 1);
+        }
+        $result = $this->evaluator->evaluate($expression, $names);
+        return $skip ? Parser::SKIP : $result;
     }
 
     protected function handleAssignment($token)

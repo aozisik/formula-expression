@@ -60,4 +60,11 @@ class BasicTest extends TestCase
         ]);
         $this->assertEquals(9, $output);
     }
+
+    public function testItSkipsReturn()
+    {
+        $evaluator = new FormulaLanguage();
+        $output = $evaluator->evaluate('#5;6');
+        $this->assertEquals(6, $output);
+    }
 }
