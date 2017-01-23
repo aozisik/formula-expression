@@ -4,6 +4,7 @@ namespace Swiftmade\FEL;
 
 use Swiftmade\FEL\Casts\Stringy;
 use Swiftmade\FEL\Casts\Collection;
+use Swiftmade\FEL\Contracts\CacheDriver;
 use Swiftmade\FEL\Contracts\CastContract;
 
 class FormulaLanguage
@@ -13,8 +14,9 @@ class FormulaLanguage
     protected $parser;
     protected $typeCasts;
 
-    public function __construct()
+    public function __construct(CacheDriver $cache = null)
     {
+        $this->cache = $cache;
         $this->typeCasts = [];
         $this->lexer = new Lexer();
         $this->parser = new Parser();
