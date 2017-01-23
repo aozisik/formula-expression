@@ -9,7 +9,7 @@ use Swiftmade\FEL\Contracts\CastContract;
 
 class FormulaLanguage
 {
-
+    protected $cache;
     protected $lexer;
     protected $parser;
     protected $typeCasts;
@@ -23,6 +23,10 @@ class FormulaLanguage
 
         $this->registerTypeCast(new Stringy);
         $this->registerTypeCast(new Collection);
+
+        if(is_null($this->cache)) {
+            $this->cache = new ArrayCache();
+        }
     }
 
     public function registerTypeCast(CastContract $cast)
@@ -30,14 +34,24 @@ class FormulaLanguage
         $this->typeCasts[$cast->type()] = $cast;
     }
 
+    protected function hash($code, array $variables)
+    {
+        return sha1(serialize($code) . serialize($variables));
+    }
+
     public function evaluate($code, array $variables = [])
     {
-        $result = $this->parser->parse(
+        $cacheHash = $this->hash($code, $variables);
+        if($this->cache->has($cacheHash)) {
+            return $this->cache->get($cacheHash);
+        }
+        $rawResult = $this->parser->parse(
             $this->lexer->tokenize($code),
             $variables
         );
-
-        return $this->returnResult($result);
+        $result = $this->optimizeResult($rawResult);
+        $this->cache->put($cacheHash, $result);
+        return $result;
     }
 
     protected function resultType($result)
@@ -49,7 +63,7 @@ class FormulaLanguage
         return $type;
     }
 
-    protected function returnResult($result)
+    protected function optimizeResult($result)
     {
         $nullValues = [Parser::SKIP, Parser::IF_FALSE];
         if (gettype($result) === 'string' and in_array($result, $nullValues)) {
