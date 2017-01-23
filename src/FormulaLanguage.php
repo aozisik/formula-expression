@@ -34,24 +34,35 @@ class FormulaLanguage
         $this->typeCasts[$cast->type()] = $cast;
     }
 
-    protected function hash($code, array $variables)
+    protected function hash($var)
     {
-        return sha1(serialize($code) . serialize($variables));
+        return sha1(serialize($var));
+    }
+
+    protected function remember($key, $value)
+    {
+        if($this->cache->has($key)) {
+            return $this->cache->get($key);
+        }
+        $result = call_user_func($value);
+        $this->cache->put($key, $result);
+        return $result;
     }
 
     public function evaluate($code, array $variables = [])
     {
-        $cacheHash = $this->hash($code, $variables);
-        if($this->cache->has($cacheHash)) {
-            return $this->cache->get($cacheHash);
-        }
-        $rawResult = $this->parser->parse(
-            $this->lexer->tokenize($code),
-            $variables
-        );
-        $result = $this->optimizeResult($rawResult);
-        $this->cache->put($cacheHash, $result);
-        return $result;
+        $resultHash = sha1($this->hash($code) . $this->hash($variables));
+
+        return $this->remember($resultHash, function() use($code, $variables) {
+            $tokenStream = $this->remember(
+                'code.' . $this->hash($code),
+                function() use($code) {
+                    return $this->lexer->tokenize($code);
+                }
+            );
+            $rawResult = $this->parser->parse($tokenStream, $variables);
+            return $this->optimizeResult($rawResult);
+        });
     }
 
     protected function resultType($result)
