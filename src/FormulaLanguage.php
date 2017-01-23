@@ -36,7 +36,7 @@ class FormulaLanguage
 
     protected function hash($var)
     {
-        return sha1(serialize($var));
+        return md5(json_encode($var));
     }
 
     protected function remember($key, $value)
