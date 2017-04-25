@@ -18,4 +18,15 @@ class ForeachTest extends TestCase
         ]);
         $this->assertEquals('Ahmet Özışık', $result);
     }
+
+    public function testForeachArgumentsCanContainAs()
+    {
+        $code = 'foreach(measures as measure) {' . PHP_EOL
+            . '}';
+        $evaluator = new FormulaLanguage();
+        $evaluator->evaluate($code, [
+            'measures' => []
+        ]);
+        $this->addToAssertionCount(1);
+    }
 }
