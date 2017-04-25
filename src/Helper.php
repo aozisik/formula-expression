@@ -43,11 +43,11 @@ class Helper
         }, $source);
     }
 
-    public function enumerate(array $array)
+    public function enumerate($item)
     {
-        if (isset($array[0])) {
-            return $array;
+        if (is_array($item)) {
+            return $item;
         }
-        return [$array];
+        return [$item];
     }
 }
