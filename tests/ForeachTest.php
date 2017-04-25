@@ -29,4 +29,19 @@ class ForeachTest extends TestCase
         ]);
         $this->addToAssertionCount(1);
     }
-}
+
+    public function testForeachProvidesAccessToCurrentKey()
+    {
+        $code = 'keys = "";' . PHP_EOL
+            . "foreach(vars as key => name) {" . PHP_EOL
+            . 'keys = keys ~ key;' . PHP_EOL
+            . "}" . PHP_EOL
+            . 'keys;';
+
+        $evaluator = new FormulaLanguage();
+        $result = $evaluator->evaluate($code, [
+            'vars' => ['a' => 'bar', 'b' => 'foo']
+        ]);
+        $this->assertEquals('ab', $result);
+    }
+}      
