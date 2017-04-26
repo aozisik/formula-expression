@@ -45,7 +45,7 @@ class Helper
 
     public function enumerate($item)
     {
-        if (is_array($item)) {
+        if (is_array($item) and isset($item[0])) {
             return $item;
         }
         return [$item];
