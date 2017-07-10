@@ -31,12 +31,12 @@ class Helper
         }
         $keys = array_keys($dictionary);
         $values = array_values($dictionary);
-        $uniqIds = [];
+        $replaceKeys = [];
         for($i = 0; $i<count($values); $i++) {
-            $uniqIds[] = uniqid();
+            $replaceKeys[] = '${' . $i .'}';
         }
-        $output = str_replace($keys, $uniqIds, $subject);
-        return str_replace($uniqIds, $values, $output);
+        $output = str_replace($keys, $replaceKeys, $subject);
+        return str_replace($replaceKeys, $values, $output);
     }
 
     public function select(array $source, array $keys)
