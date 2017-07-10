@@ -29,7 +29,14 @@ class Helper
                 return $this->replace($dictionary, $item);
             }, $subject);
         }
-        return str_replace(array_keys($dictionary), array_values($dictionary), $subject);
+        $keys = array_keys($dictionary);
+        $values = array_values($dictionary);
+        $uniqIds = [];
+        for($i = 0; $i<count($values); $i++) {
+            $uniqIds[] = uniqid();
+        }
+        $output = str_replace($keys, $uniqIds, $subject);
+        return str_replace($uniqIds, $values, $output);
     }
 
     public function select(array $source, array $keys)

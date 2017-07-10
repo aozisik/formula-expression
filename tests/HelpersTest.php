@@ -18,4 +18,18 @@ class HelpersTest extends TestCase
         $result = $helper->enumerate(["name" => "John", "last_name" => "Doe"]);
         $this->assertEquals([["name" => "John", "last_name" => "Doe"]], $result);
     }
+
+    public function testReplaceHelper()
+    {
+        $subject = 'abc';
+        $dictionary = [
+            'a' => 'bar',
+            'b' => 'baz',
+            'c' => 'foo'
+        ];
+
+        $helper = new Helper();
+        $result = $helper->replace($dictionary, $subject);
+        $this->assertEquals('barbazfoo', $result);
+    }
 }      
