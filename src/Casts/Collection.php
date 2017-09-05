@@ -8,7 +8,7 @@ class Collection implements CastContract
 {
     public function type()
     {
-        return \LaravelCollect\Support\Collection::class;
+        return \Illuminate\Support\Collection::class;
     }
 
     public function cast($value)

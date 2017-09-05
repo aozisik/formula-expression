@@ -3,7 +3,7 @@
 namespace Swiftmade\FEL;
 
 use Swiftmade\FEL\Support\Stringy;
-use LaravelCollect\Support\Collection;
+use Illuminate\Support\Collection;
 
 class Helper
 {
